@@ -1,0 +1,30 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>eBay Manager — connecting</title>
+<meta name="robots" content="noindex">
+<style>
+  body{font:14px -apple-system,system-ui,sans-serif;display:grid;place-items:center;
+       min-height:100vh;margin:0;background:#fafaf9;color:#1c1917}
+  .card{max-width:32rem;padding:2rem;background:#fff;border:1px solid #e7e5e4;border-radius:12px}
+  h1{margin:0 0 .5rem;font-size:1.05rem}
+  p{margin:.5rem 0 0;color:#57534e;line-height:1.5}
+  code{background:#f5f5f4;padding:.1rem .3rem;border-radius:4px}
+</style>
+<div class="card">
+  <h1>Returning you to eBay Manager…</h1>
+  <p id="msg">If nothing happens, make sure the local server is running on port 8787.</p>
+</div>
+<script>
+  // eBay requires an https auth-accepted URL, which rules out localhost. This
+  // page is the whole workaround: it immediately hands the query string to the
+  // local server, so the authorization code goes straight from eBay to your
+  // own machine and is never seen by any third-party backend.
+  //
+  // Deploy this single file anywhere static (GitHub Pages, Cloudflare Pages)
+  // and register its URL as the auth-accepted URL on your eBay keyset.
+  var port = new URLSearchParams(location.search).get('port') || '8787';
+  var target = 'http://127.0.0.1:' + port + '/oauth/callback' + location.search;
+  if (location.search) location.replace(target);
+  else document.getElementById('msg').textContent =
+    'No authorization code in the URL. Start the connection from the app.';
+</script>
